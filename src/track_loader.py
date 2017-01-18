@@ -6,10 +6,16 @@ import concurrent.futures
 from . import track
 
 
-def load_gpx_file(file_name):
+def load_file(file_name):
     print("Loading track {}...".format(os.path.basename(file_name)))
     t = track.Track()
-    t.load_gpx(file_name)
+    print("track file: ", file_name)
+    ext = os.path.splitext(file_name)[1]
+    print("track file ext: ", ext)
+    if ext == ".gpx":
+        t.load_gpx(file_name)
+    if ext == ".fit":
+        t.load_fit(file_name)
     return t
 
 
@@ -37,9 +43,9 @@ class TrackLoader:
             except OSError as e:
                 print("Failed: {}".format(e))
 
-    def load_tracks(self, base_dir):
-        file_names = [x for x in self.__list_gpx_files(base_dir)]
-        print("GPX files: {}".format(len(file_names)))
+    def load_tracks(self, base_dir, ext):
+        file_names = [x for x in self.__list_files(base_dir, ext)]
+        print("Activity files: {}".format(len(file_names)))
 
         tracks = []
 
@@ -51,10 +57,10 @@ class TrackLoader:
             print("Loaded tracks from cache:", len(cached_tracks))
             tracks = list(cached_tracks.values())
 
-        # load remaining gpx files
+        # load remaining files
         remaining_file_names = [f for f in file_names if f not in cached_tracks]
         if remaining_file_names:
-            print("Trying to load {} track(s) from GPX files; this may take a while...".format(len(remaining_file_names)))
+            print("Trying to load {} track(s) from files; this may take a while...".format(len(remaining_file_names)))
             loaded_tracks = self.__load_tracks(remaining_file_names)
             print("Conventionally loaded tracks:", len(loaded_tracks))
 
@@ -105,7 +111,7 @@ class TrackLoader:
     def __load_tracks(file_names):
         tracks = {}
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            future_to_file_name = {executor.submit(load_gpx_file, file_name): file_name for file_name in file_names}
+            future_to_file_name = {executor.submit(load_file, file_name): file_name for file_name in file_names}
         for future in concurrent.futures.as_completed(future_to_file_name):
             file_name = future_to_file_name[future]
             try:
@@ -134,13 +140,13 @@ class TrackLoader:
         return tracks
 
     @staticmethod
-    def __list_gpx_files(base_dir):
+    def __list_files(base_dir, ext):
         base_dir = os.path.abspath(base_dir)
         if not os.path.isdir(base_dir):
             raise Exception("Not a directory: {}".format(base_dir))
         for name in os.listdir(base_dir):
             path_name = os.path.join(base_dir, name)
-            if name.endswith(".gpx") and os.path.isfile(path_name):
+            if name.endswith("." + ext) and os.path.isfile(path_name):
                 yield path_name
 
 
