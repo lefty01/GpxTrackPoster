@@ -38,6 +38,28 @@ class Track:
                     line = [(p.latitude, p.longitude) for p in s.points]
                     self.polylines.append(line)
 
+    def load_fit(self, file_name):
+        self.file_names = [os.path.basename(file_name)]
+        with open(file_name, 'r') as file:
+            print("fit file: ", file_name)
+            # fixme/todo: either convert fit to gpx here or parse fit directly...
+            # fit = fitpy.parse(file)   ## FIXME !!!!
+            # b = fit.get_time_bounds() ## FIXME !!!!
+            # self.start_time = b[0]
+            # self.end_time = b[1]
+            # if self.start_time is None:
+            #     raise Exception("Track has no start time.")
+            # if self.end_time is None:
+            #     raise Exception("Track has no end time.")
+            # self.length = fit.length_2d() ## FIXME !!!!
+            # if self.length == 0:
+            #     raise Exception("Track is empty.")
+            # fit.simplify() ## FIXME !!!!
+            # for t in fit.tracks:
+            #     for s in t.segments:
+            #         line = [(p.latitude, p.longitude) for p in s.points]
+            #         self.polylines.append(line)
+
     def append(self, other):
         self.end_time = other.end_time
         self.polylines.extend(other.polylines)

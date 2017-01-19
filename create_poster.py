@@ -28,18 +28,27 @@ def main():
                   "circular": circular_drawer.TracksDrawer()}
 
     args_parser = argparse.ArgumentParser()
-    args_parser.add_argument('--gpx-dir', dest='gpx_dir', metavar='DIR', type=str, default='.',
-                             help='Directory containing GPX files (default: current directory).')
-    args_parser.add_argument('--output', metavar='FILE', type=str, default='poster.svg',
+    # group = args_parser.add_mutually_exclusive_group(required=True)
+    # group.add_argument('--gpx-dir', dest='gpx_dir', nargs='?', metavar='DIR', type=str, default='.',
+    #                          help='Directory containing GPX files (default: current directory).')
+    # group.add_argument('--fit-dir', dest='fit_dir', nargs='?', metavar='FITDIR', type=str, default='.',
+    #                          help='Directory containing FIT files (default: current directory).')
+    # group.add_argument('--dir', dest='indir', nargs='?', metavar='DIR', type=str, default='.',
+    #                          help='Directory containing input files (default: current directory).')
+    args_parser.add_argument('-d', '--dir', dest='indir', nargs='?', metavar='DIR', type=str, default='.',
+                             help='Directory containing input files (default: current directory).')
+    args_parser.add_argument('-f', '--format', nargs='?', choices=['gpx', 'fit'], default="gpx",
+                             help="Input file format, can be 'gpx', or 'git' (default: 'gpx')")
+    args_parser.add_argument('-o', '--output', metavar='FILE', type=str, default='poster.svg',
                              help='Name of generated SVG image file (default: "poster.svg").')
     args_parser.add_argument('--year', metavar='YEAR', type=int, default=datetime.date.today().year - 1,
                              help='Filter tracks by year (default: past year)')
     args_parser.add_argument('--title', metavar='TITLE', type=str, default="My Tracks",
                              help='Title to display (default: "My Tracks").')
-    args_parser.add_argument('--athlete', metavar='NAME', type=str, default="John Doe",
-                             help='Athlete name to display (default: "John Doe").')
+    args_parser.add_argument('--athlete', metavar='NAME', type=str, default="tr41lrunner",
+                             help='Athlete name to display (default: "tr41lrunner").')
     args_parser.add_argument('--special', metavar='FILE', action='append', default=[],
-                             help='Mark track file from the GPX directory as special; use multiple times to mark multiple tracks.')
+                             help='Mark track file from the input directory as special; use multiple times to mark multiple tracks.')
     args_parser.add_argument('--type', metavar='TYPE', default='grid', choices=generators.keys(),
                              help='Type of poster to create (default: "grid", available: "{}").'.format('", "'.join(generators.keys())))
     args_parser.add_argument('--background-color', dest='background_color', metavar='COLOR', type=str,
@@ -59,7 +68,8 @@ def main():
     loader.special_file_names = args.special
     if args.clear_cache:
         loader.clear_cache()
-    tracks = loader.load_tracks(args.gpx_dir)
+    
+    tracks = loader.load_tracks(args.indir, args.format)
     if not tracks:
         raise Exception('No tracks found.')
 
