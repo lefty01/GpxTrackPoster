@@ -18,7 +18,9 @@ class TracksDrawer:
         for track in self.poster.tracks:
             track_xy = []
             for polyline in track.polylines:
+                print("polyline: "+str(polyline))
                 track_xy.append([utils.latlng2xy(lat, lng) for (lat, lng) in polyline])
+                print("track_xy: "+str(track_xy[-1]))
             xy_polylines.extend(track_xy)
             if track.special:
                 xy_polylines_special.extend(track_xy)
@@ -27,12 +29,17 @@ class TracksDrawer:
         d_x = max_x - min_x
         d_y = max_y - min_y
 
+        print("min_x="+str(min_x)+", max_x="+str(max_x)+" min_y="+str(min_y)+" max_y="+str(max_y))
+        print("d_x="+str(d_x)+"+d_y="+str(d_y))
         # compute scale
         scale = w/d_x if w/h <= d_x/d_y else h/d_y
+        #scale=1000
+        print("scale=" + str(scale))
 
         # compute offsets such that projected track is centered in its rect
         offset_x += 0.5 * w - 0.5 * scale * d_x
         offset_y += 0.5 * h - 0.5 * scale * d_y
+        print("offset_x=" + str(offset_x) + " offset_y=" + str(offset_y))
 
         scaled_lines = []
         for line in xy_polylines:
