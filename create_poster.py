@@ -38,7 +38,7 @@ def main():
     args_parser.add_argument('-d', '--dir', dest='indir', nargs='?', metavar='DIR', type=str, default='.',
                              help='Directory containing input files (default: current directory).')
     args_parser.add_argument('-f', '--format', nargs='?', choices=['gpx', 'fit'], default="gpx",
-                             help="Input file format, can be 'gpx', or 'git' (default: 'gpx')")
+                             help="Input file format, can be 'gpx', or 'fit' (default: 'gpx')")
     args_parser.add_argument('-o', '--output', metavar='FILE', type=str, default='poster.svg',
                              help='Name of generated SVG image file (default: "poster.svg").')
     args_parser.add_argument('--year', metavar='YEAR', type=int, default=datetime.date.today().year - 1,
