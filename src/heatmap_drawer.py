@@ -20,6 +20,7 @@ class TracksDrawer:
         xy_polylines_special = []
         for track in self.poster.tracks:
             track_xy = []
+            #print("track polylines: {}" . format(track.polylines))
             for polyline in track.polylines:
                 track_xy.append([utils.latlng2xy(lat, lng) for (lat, lng) in polyline])
             xy_polylines.extend(track_xy)

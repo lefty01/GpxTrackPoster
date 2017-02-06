@@ -13,6 +13,7 @@ class Track:
     def __init__(self):
         self.file_names = []
         self.polylines = []
+        self.bounds = {}
         self.start_time = None
         self.end_time = None
         self.length = 0
@@ -22,9 +23,14 @@ class Track:
         self.file_names = [os.path.basename(file_name)]
         with open(file_name, 'r') as file:
             gpx = gpxpy.parse(file)
-            b = gpx.get_time_bounds()
-            self.start_time = b[0]
-            self.end_time = b[1]
+            tb = gpx.get_time_bounds()
+            b = gpx.get_bounds()
+            self.start_time = tb[0]
+            self.end_time = tb[1]
+            self.bounds['min_lat'] = b.min_latitude
+            self.bounds['max_lat'] = b.max_latitude
+            self.bounds['min_lon'] = b.min_longitude
+            self.bounds['max_lon'] = b.max_longitude
             if self.start_time is None:
                 raise Exception("Track has no start time.")
             if self.end_time is None:
@@ -44,6 +50,8 @@ class Track:
         self.length += other.length
         self.file_names.extend(other.file_names)
         self.special = self.special or other.special
+
+    # FIXME: load/store track bounds in cache
 
     def load_cache(self, cache_file_name):
         with open(cache_file_name) as data_file:
@@ -66,5 +74,9 @@ class Track:
             json.dump({"start": self.start_time.strftime("%Y-%m-%d %H:%M:%S"),
                        "end": self.end_time.strftime("%Y-%m-%d %H:%M:%S"),
                        "length": self.length,
+                       "min_lat": self.bounds['min_lat'],
+                       "max_lat": self.bounds['max_lat'],
+                       "min_lon": self.bounds['min_lon'],
+                       "max_lon": self.bounds['max_lon'],
                        "segments": lines_data},
                       json_file)

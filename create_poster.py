@@ -43,7 +43,7 @@ def main():
     args_parser.add_argument('--type', metavar='TYPE', default='grid', choices=generators.keys(),
                              help='Type of poster to create (default: "grid", available: "{}").'.format('", "'.join(generators.keys())))
     args_parser.add_argument('--bbox', metavar='BBOX', required=False, nargs=4, type=float,
-                             help='Set bounding box for heatmap poster. Requires four values --bbox lat_max lon_min lat_min lon_max e.g. --bbox 48.815 8.741 48.463 9.539')
+                             help='Set bounding box for heatmap poster. Requires four values --bbox lat_min lat_max lon_min lon_max e.g. --bbox 48.463 48.815 8.741 9.539')
     args_parser.add_argument('--background-color', dest='background_color', metavar='COLOR', type=str,
                              default='#222222', help='Background color of poster (default: "#222222").')
     args_parser.add_argument('--track-color', dest='track_color', metavar='COLOR', type=str, default='#4DD2FF',
@@ -61,7 +61,7 @@ def main():
     loader.special_file_names = args.special
     if args.clear_cache:
         loader.clear_cache()
-    tracks = loader.load_tracks(args.gpx_dir)
+    tracks = loader.load_tracks(args.gpx_dir, args.bbox)
     if not tracks:
         raise Exception('No tracks found.')
 

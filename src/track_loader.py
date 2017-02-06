@@ -32,6 +32,7 @@ class TrackLoader:
         self.special_file_names = []
         self.year = None
         self.cache_dir = None
+        self.bounds_filter = []
 
     def clear_cache(self):
         if os.path.isdir(self.cache_dir):
@@ -41,11 +42,12 @@ class TrackLoader:
             except OSError as e:
                 print("Failed: {}".format(e))
 
-    def load_tracks(self, base_dir):
+    def load_tracks(self, base_dir, bbox):
         file_names = [x for x in self.__list_gpx_files(base_dir)]
         print("GPX files: {}".format(len(file_names)))
 
         tracks = []
+        self.bounds_filter = bbox
 
         # load track from cache
         cached_tracks = []
@@ -89,6 +91,8 @@ class TrackLoader:
                 print("{}: skipping track without start time".format(file_name))
             elif t.start_time.year != self.year:
                 print("{}: skipping track with wrong year {}".format(file_name, t.start_time.year))
+            elif self.bounds_filter and self.__is_out_of_bounds(t.bounds):
+                print("{}: skipping out of bounds track (bounds: {}".format(file_name, t.bounds))
             else:
                 t.special = (file_name in self.special_file_names)
                 filtered_tracks.append(t)
@@ -111,6 +115,11 @@ class TrackLoader:
             last_end_time = t.end_time
         print("Merged {} track(s)".format(len(tracks) - len(merged_tracks)))
         return merged_tracks
+
+    def __is_out_of_bounds(self, bounds):
+        print("__is_out_of_bounds: --bbox argument: {}" . format(self.bounds_filter))
+        print("this track bounds: {}" . format(bounds))
+
 
     @staticmethod
     def __load_tracks(file_names):
