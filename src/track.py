@@ -51,7 +51,6 @@ class Track:
         self.file_names.extend(other.file_names)
         self.special = self.special or other.special
 
-    # FIXME: load/store track bounds in cache
 
     def load_cache(self, cache_file_name):
         with open(cache_file_name) as data_file:
@@ -59,6 +58,10 @@ class Track:
             self.start_time = datetime.datetime.strptime(data["start"], "%Y-%m-%d %H:%M:%S")
             self.end_time = datetime.datetime.strptime(data["end"], "%Y-%m-%d %H:%M:%S")
             self.length = float(data["length"])
+            self.bounds['min_lat'] = float(data['min_lat'])
+            self.bounds['max_lat'] = float(data['max_lat'])
+            self.bounds['min_lon'] = float(data['min_lon'])
+            self.bounds['max_lon'] = float(data['max_lon'])
             self.polylines = []
             for data_line in data["segments"]:
                 self.polylines.append([(float(d["lat"]), float(d["lng"])) for d in data_line])

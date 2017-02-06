@@ -117,8 +117,14 @@ class TrackLoader:
         return merged_tracks
 
     def __is_out_of_bounds(self, bounds):
-        print("__is_out_of_bounds: --bbox argument: {}" . format(self.bounds_filter))
-        print("this track bounds: {}" . format(bounds))
+        #print("this track bounds: {}" . format(bounds))
+        if ((bounds['min_lat'] >= self.bounds_filter[0]) and
+            (bounds['max_lat'] <= self.bounds_filter[1]) and
+            (bounds['min_lon'] >= self.bounds_filter[2]) and
+            (bounds['max_lon'] <= self.bounds_filter[3])):
+            return False
+        else:
+            return True
 
 
     @staticmethod

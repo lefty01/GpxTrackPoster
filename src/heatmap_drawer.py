@@ -27,11 +27,11 @@ class TracksDrawer:
             if track.special:
                 xy_polylines_special.extend(track_xy)
 
-        if None == bbox:
-            (min_x, min_y, max_x, max_y) = utils.compute_bounds_xy(xy_polylines)
-        else:
-            (min_x, min_y) = utils.latlng2xy(bbox[0], bbox[3])
-            (max_x, max_y) = utils.latlng2xy(bbox[2], bbox[1])
+        #if None == bbox:
+        (min_x, min_y, max_x, max_y) = utils.compute_bounds_xy(xy_polylines)
+        #else:
+        #    (min_x, max_x) = utils.latlng2xy(bbox[0], bbox[1])
+        #    (min_y, max_y) = utils.latlng2xy(bbox[2], bbox[3])
 
         d_x = max_x - min_x
         d_y = max_y - min_y
