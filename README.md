@@ -14,7 +14,7 @@ You will need a little experience running things from the command line to use th
 ```
 usage: create_poster.py [-h] [--gpx-dir DIR] [--output FILE] [--year YEAR]
                [--title TITLE] [--athlete NAME] [--special FILE] [--type TYPE]
-               [--background-color COLOR] [--track-color COLOR]
+               [--bbox BBOX] [--background-color COLOR] [--track-color COLOR]
                [--text-color COLOR] [--special-color COLOR] [--clear-cache]
 
 optional arguments:
