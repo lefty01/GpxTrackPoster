@@ -26,6 +26,8 @@ optional arguments:
   --athlete NAME            Athlete name to display (default: "John Doe").
   --special FILE            Mark track file from the GPX directory as special; use multiple times to mark multiple tracks.
   --type TYPE               Type of poster to create (default: "grid", available: "calendar", "circular", "grid", "heatmap").
+  --bbox BBOX               Set bounding box for heatmap poster type. BBOX requires exactly four values: lat_min lat_max lon_min lon_max
+                            (example: --bbox 48.463 48.815 8.741 9.539).
   --background-color COLOR  Background color of poster (default: "#222222").
   --track-color COLOR       Color of tracks (default: "#4DD2FF").
   --text-color COLOR        Color of text (default: "#FFFFFF").
